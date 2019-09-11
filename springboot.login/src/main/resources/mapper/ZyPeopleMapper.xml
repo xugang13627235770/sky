@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springboottest1.mapper.ZyMapper" >
+  <!--用户登录验证-->
+  <select id="getZyPeople" resultType="com.example.springboottest1.entity.ZyPeople">
+    SELECT ID as id, SFZH as sfzh, XM as xm, LB as lb FROM ZY_PEOPLE WHERE sfzh = #{value}
+  </select>
+
+  <select id="getZyPeopleCount" resultType="java.lang.Integer">
+    SELECT count(1) FROM ZY_PEOPLE
+  </select>
+
+  <select id="getAllZyPeople" resultType="com.example.springboottest1.entity.ZyPeople" parameterType="com.example.springboottest1.entity.MyPage">
+    SELECT ID as id, SFZH as sfzh, XM as xm, LB as lb
+    FROM
+    (
+    SELECT t.*, rownum rn
+    FROM
+    (
+    SELECT * FROM ZY_PEOPLE order by id asc
+    ) t
+    )
+    WHERE
+    rn &gt;(#{currentPage}-1)* #{pageSize}
+    AND rn &lt;= #{currentPage}* #{pageSize}
+  </select>
+</mapper>

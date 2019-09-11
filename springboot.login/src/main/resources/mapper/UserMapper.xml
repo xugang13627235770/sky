@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springboottest1.mapper.UserMapper" >
+  <!--用户登录验证-->
+  <select id="userlogin" parameterType="com.example.springboottest1.entity.User" resultType="com.example.springboottest1.entity.User">
+    SELECT id,username,password,age FROM user WHERE username = #{username} AND password = #{password}
+  </select>
+
+  <!--新用户注册  方式1-->
+  <insert id="adduser" parameterType="com.example.springboottest1.entity.User" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO user (username,password,age) VALUES (#{username},#{password},#{age})
+  </insert>
+
+  <!--新用户注册  方式2-->
+  <insert id="adduser1" parameterType="com.example.springboottest1.entity.User">
+    INSERT INTO user (id,username,password,age) VALUES (UUID(),#{username},#{password},#{age})
+  </insert>
+</mapper>

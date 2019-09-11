@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.springboottest1.mapper.ZyczMapper" >
+  <!--用户登录验证-->
+  <select id="getZyczPeopleBysfzh" resultType="com.example.springboottest1.entity.ZyczPeople" parameterType="java.util.List">
+    select t1.id,t1.pid,t1.IMAGE AS image,t1.WHEN_REGISTERED as whenRegistered
+    from zycz_people t1
+    inner join (select max(id) as id, pid
+    from zycz_people
+    where pid in <foreach collection="pidList" item="item" open="(" separator="," close=")">#{item}</foreach>
+    group by pid) t2
+    on t1.pid = t2.pid
+    and t1.id = t2.id
+    and t1.pid in
+    <foreach collection="pidList" item="item" open="(" separator="," close=")">#{item}</foreach>
+  </select>
+
+  <insert id="insertZyczPeople"  parameterType="com.example.springboottest1.entity.ZyczPeople">
+    insert into zycz_people(id, pid, IMAGE)
+    values (#{id}, #{pid}, #{image})
+  </insert>
+
+  <select id="getZyczPeople" resultType="com.example.springboottest1.entity.ZyczPeople">
+    select t1.id ，t1.pid, t1.IMAGE as image
+    from zycz_people t1
+    inner join (select max(id) id, pid
+    from zycz_people
+    where pid = #{value}
+    group by pid) t2
+    on t1.id = t2.id
+    where t1.pid = #{value}
+
+  </select>
+
+</mapper>
